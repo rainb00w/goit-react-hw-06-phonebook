@@ -10,8 +10,7 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-
+import storage from 'redux-persist/lib/storage';
 const persistConfig = {
   key: 'root',
   storage,
@@ -53,5 +52,3 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-// state.items.push(action)
-// state.items.filter(item => item.id !== action.payload);

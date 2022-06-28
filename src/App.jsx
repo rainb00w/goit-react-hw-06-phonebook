@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { nanoid } from 'nanoid';
 import Form from './components/Form';
 import RenderContacts from './components/RenderContacts';
@@ -8,16 +8,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addContact, deleteOneContact, addFilter } from './redux/store';
 
 const App = () => {
-  // const [contacts, setContacts] = useState(
-  //   () => JSON.parse(window.localStorage.getItem('contacts')) ?? []
-  // );
-  // const [filter, setFilter] = useState('');
-
   const dispatch = useDispatch();
 
   const contactsRedux = useSelector(state => state.contacts.items);
   const filterRedux = useSelector(state => state.contacts.filter);
-  console.log('Items - ', contactsRedux, 'Filter -', filterRedux);
+  // console.log('Items - ', contactsRedux, 'Filter -', filterRedux);
 
   const formSubmitHandler = (name, number) => {
     const normalizedName = name.toLowerCase();
@@ -46,11 +41,6 @@ const App = () => {
   const deleteContact = ID => {
     dispatch(deleteOneContact(ID));
   };
-
-  // useEffect(() => {
-  //   window.localStorage.setItem('contacts', JSON.stringify(contacts));
-  //   // console.log('CLG', JSON.parse(window.localStorage.getItem('contacts')));
-  // }, [contacts]);
 
   const normalizedFilter = filterRedux.toLowerCase();
   const filteredContacts = contactsRedux.filter(contact =>
