@@ -4,18 +4,28 @@ import Form from './components/Form';
 import RenderContacts from './components/RenderContacts';
 import Section from './components/Section';
 import Filter from './components/Filter';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContact, deleteOneContact, addFilter } from './redux/store';
 
 const App = () => {
-  const [contacts, setContacts] = useState(
-    () => JSON.parse(window.localStorage.getItem('contacts')) ?? []
-  );
-  const [filter, setFilter] = useState('');
+  // const [contacts, setContacts] = useState(
+  //   () => JSON.parse(window.localStorage.getItem('contacts')) ?? []
+  // );
+  // const [filter, setFilter] = useState('');
+
+  const dispatch = useDispatch();
+
+  const contactsRedux = useSelector(state => state.contacts.items);
+  const filterRedux = useSelector(state => state.contacts.filter);
+  console.log('Items - ', contactsRedux, 'Filter -', filterRedux);
 
   const formSubmitHandler = (name, number) => {
     const normalizedName = name.toLowerCase();
 
     if (
-      contacts.find(contact => contact.name.toLowerCase() === normalizedName)
+      contactsRedux.find(
+        contact => contact.name.toLowerCase() === normalizedName
+      )
     ) {
       alert(` ${name} is already in contacts`);
       return;
@@ -26,36 +36,36 @@ const App = () => {
       id: nanoid(),
       number,
     };
-    setContacts(prevState => [...prevState, contact]);
+    dispatch(addContact(contact));
   };
 
   const changeFilter = evnt => {
-    setFilter(evnt.currentTarget.value);
+    dispatch(addFilter(evnt.currentTarget.value));
   };
 
   const deleteContact = ID => {
-    setContacts(contacts.filter(item => item.id !== ID));
+    dispatch(deleteOneContact(ID));
   };
 
-  useEffect(() => {
-    window.localStorage.setItem('contacts', JSON.stringify(contacts));
-    console.log('CLG', JSON.parse(window.localStorage.getItem('contacts')));
-  }, [contacts]);
+  // useEffect(() => {
+  //   window.localStorage.setItem('contacts', JSON.stringify(contacts));
+  //   // console.log('CLG', JSON.parse(window.localStorage.getItem('contacts')));
+  // }, [contacts]);
 
-  const normalizedFilter = filter.toLowerCase();
-  const filteredContacts = contacts.filter(contact =>
+  const normalizedFilter = filterRedux.toLowerCase();
+  const filteredContacts = contactsRedux.filter(contact =>
     contact.name.toLowerCase().includes(normalizedFilter)
   );
 
   return (
     <Section>
       <Form onSubmit={formSubmitHandler} />
-      {contacts.length > 0 ? (
-        <Filter value={filter} onChange={changeFilter} />
+      {contactsRedux.length > 0 ? (
+        <Filter value={filterRedux} onChange={changeFilter} />
       ) : (
         ''
       )}
-      {contacts.length > 0 ? (
+      {contactsRedux.length > 0 ? (
         <RenderContacts
           contacts={filteredContacts}
           onDeleteContact={deleteContact}
