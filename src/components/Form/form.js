@@ -15,7 +15,6 @@ const Form = ({ onSubmit }) => {
 
     switch (name) {
       case 'name':
-        console.log(value);
         setName(value);
         break;
       case 'number':
