@@ -11,10 +11,6 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-const persistConfig = {
-  key: 'root',
-  storage,
-};
 
 const contacts = {
   items: [],
@@ -24,6 +20,11 @@ const contacts = {
 export const addContact = createAction('add/contact');
 export const deleteOneContact = createAction('delete/contact');
 export const addFilter = createAction('add/filter');
+
+const persistConfig = {
+  key: 'root',
+  storage,
+};
 
 const myReducer = createReducer(contacts, {
   [addContact]: (state, action) => {

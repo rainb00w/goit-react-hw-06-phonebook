@@ -1,19 +1,31 @@
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteOneContact } from '../../redux/store';
 import s from './renderContact.module.css';
 
-const RenderContacts = ({ contacts, onDeleteContact }) => {
+const RenderContacts = () => {
+  const dispatch = useDispatch();
+
+  const deleteContact = ID => {
+    dispatch(deleteOneContact(ID));
+  };
+
+  const contactsRedux = useSelector(state => state.contacts.items);
+  const filterRedux = useSelector(state => state.contacts.filter);
+
+  const normalizedFilter = filterRedux.toLowerCase();
+  const filteredContacts = contactsRedux.filter(contact =>
+    contact.name.toLowerCase().includes(normalizedFilter)
+  );
+
   return (
     <>
       <p className={s.text}>Contacts</p>
       <ul className={s.contactsList}>
-        {contacts.map(({ id, name, number }) => (
+        {filteredContacts.map(({ id, name, number }) => (
           <li key={id}>
             <p>
               <span className="boldFont">{name}</span> : ( {number} )
-              <button
-                className={s.button24}
-                onClick={() => onDeleteContact(id)}
-              >
+              <button className={s.button24} onClick={() => deleteContact(id)}>
                 Delete
               </button>
             </p>
@@ -22,17 +34,6 @@ const RenderContacts = ({ contacts, onDeleteContact }) => {
       </ul>
     </>
   );
-};
-
-RenderContacts.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
-  onDeleteContact: PropTypes.func.isRequired,
 };
 
 export default RenderContacts;

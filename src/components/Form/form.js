@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { nanoid } from 'nanoid';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContact } from '../../redux/store';
 import s from './form.module.css';
 
 const Form = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const contactsRedux = useSelector(state => state.contacts.items);
+  const dispatch = useDispatch();
 
   const handleInputText = evt => {
     const { name, value } = evt.target;
+
     switch (name) {
       case 'name':
+        console.log(value);
         setName(value);
         break;
       case 'number':
@@ -23,7 +29,25 @@ const Form = ({ onSubmit }) => {
 
   const formSubmit = e => {
     e.preventDefault();
-    onSubmit(name, number);
+
+    const normalizedName = name.toLowerCase();
+
+    if (
+      contactsRedux.find(
+        contact => contact.name.toLowerCase() === normalizedName
+      )
+    ) {
+      alert(` ${name} is already in contacts`);
+      return;
+    }
+
+    const contact = {
+      name,
+      id: nanoid(),
+      number,
+    };
+    dispatch(addContact(contact));
+
     reset();
   };
 
@@ -64,10 +88,6 @@ const Form = ({ onSubmit }) => {
       </button>
     </form>
   );
-};
-
-Form.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default Form;
