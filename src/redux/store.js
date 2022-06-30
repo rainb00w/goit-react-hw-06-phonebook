@@ -24,6 +24,7 @@ export const addFilter = createAction('add/filter');
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['filter'],
 };
 
 const myReducer = createReducer(contacts, {
