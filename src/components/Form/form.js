@@ -4,13 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addContact } from '../../redux/store';
 import s from './form.module.css';
 
-const Form = ({ onSubmit }) => {
+const Form = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const contactsRedux = useSelector(state => state.contacts.items);
   const dispatch = useDispatch();
 
   const handleInputText = evt => {
+    s;
     const { name, value } = evt.target;
 
     switch (name) {
