@@ -11,7 +11,6 @@ const Form = () => {
   const dispatch = useDispatch();
 
   const handleInputText = evt => {
-    s;
     const { name, value } = evt.target;
 
     switch (name) {
